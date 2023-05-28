@@ -1,5 +1,10 @@
 def add_time(start, duration, startDay=None):
-
+    
+    hourCount = 0
+    dayCount = 0
+    freq = 0
+    day = ""
+    newDay = 0
     origin = start.split()
     startTime = origin[0]
     startPeriod = origin[1]
@@ -17,30 +22,26 @@ def add_time(start, duration, startDay=None):
     
     newHour = startHour + addHour
     newMin = startMin + addMin
-        
-    minCount = 0
-    hourCount = 0
-    dayCount = 0
     
     while newMin > 60:
         remainder = newMin - 60
         newMin = remainder
         newHour = newHour + 1
-        minCount = minCount + 1
     
-    freq = 0
     period = newHour
     
     while period >= 12:
         period = period - 12
         freq = freq + 1
         
-    while newHour > 24:
+    while newHour >= 24:
         remainder = newHour - 24
         newHour = remainder
         dayCount = dayCount + 1
         hourCount = hourCount + 1
         
+    if newHour == 0:
+            newHour = 12
 
     if startPeriod == "AM" and freq % 2 != 0:
         startPeriod = "PM"
@@ -53,9 +54,6 @@ def add_time(start, duration, startDay=None):
         newHour = newHour - 12
     
     newHour = str(newHour)
-    
-    day = ""
-    newDay = 0
     
     if newMin < 10:
         newMin = "0" + str(newMin)
