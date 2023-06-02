@@ -7,13 +7,17 @@ class Category():
         self.name = name
 
     def __repr__(self):
-        output = ""
+        ledger = ""
+        total = 0
         title = f'{self.name}'
         title_line = title.center(30, '*')
         for n in self.ledger:
-            for k,v in n.items():
-                output = output + v + "\n"
-        cat_output = title_line + "\n" + output
+            line_desc = "{:<23}".format(n["description"])
+            line_amount = "{:>7.2f}".format(float(n["amount"]))
+            ledger = ledger + f"{line_desc[:23]}{line_amount:<7}" + "\n"
+            total = total + float(n["amount"])
+        total = str(total)
+        cat_output = title_line + "\n" + ledger + "Total: " + total
         return cat_output
 
     def deposit(self, amount, desc=False):
@@ -42,7 +46,7 @@ class Category():
     
     def transfer(self, amount, new_cat):
         # Needs destination adding
-        if (self.withdraw(amount, f"Transfer to ")):
+        if (self.withdraw(amount, f"Transfer to {new_cat.name}")):
             print("Transfer Successful")
             new_cat.deposit(amount, f"Transfer from {self.name}")
             return True
@@ -69,6 +73,7 @@ clothing = Category("Clothing")
 food.transfer(50, clothing)
 print(clothing.get_balance())
 print(food)
+print(clothing)
 
 def create_spend_chart(categories):
     return True
