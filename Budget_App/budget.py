@@ -3,6 +3,8 @@ class Category():
     def __init__(self, name):
         self.ledger = []
         self.current_balance = 0
+        self.deposited = 0
+        self.spent = 0
         self.pos_funds = True
         self.name = name
 
@@ -26,6 +28,7 @@ class Category():
         depo = {"amount": f'{amount}', "description": f'{desc}'}
         self.ledger.append(depo)
         self.current_balance = self.current_balance + amount
+        self.deposited = self.deposited + amount
         print(self.ledger)
     
     def withdraw(self, amount, desc=False):
@@ -35,6 +38,7 @@ class Category():
         self.check_funds(amount)
         if self.pos_funds:
             self.current_balance = self.current_balance - amount
+            self.spent = self.spent + amount
             self.ledger.append(withd)
             print(self.ledger)
             return True
@@ -49,6 +53,8 @@ class Category():
         if (self.withdraw(amount, f"Transfer to {new_cat.name}")):
             print("Transfer Successful")
             new_cat.deposit(amount, f"Transfer from {self.name}")
+            self.spent = self.spent + amount
+            self.deposited = self.deposited + amount
             return True
         else:
             print("Transfer Failed")
@@ -64,6 +70,26 @@ class Category():
             self.pos_funds = True
             return True 
 
+def create_spend_chart(self):
+    n = 0
+    num_args = len(self)
+    while n < num_args:
+        percentage = (self[n].spent / self[n].deposited) * 100
+        rounded_perc = round(percentage/10)*10
+        n = n + 1
+    title = "Percentage Spent by Category\n"
+
+    chart = ""
+    for value in reversed(range(0,101,10)):
+        chart += str(value).rjust(3)+"|"
+        if rounded_perc >= value:
+            chart += " o "
+        else:
+            chart += "   "
+        chart += "\n"
+
+    print(chart)
+
 food = Category("Food")
 food.deposit(1000, "initial deposit")
 food.withdraw(10.15, "groceries")
@@ -74,6 +100,4 @@ food.transfer(50, clothing)
 print(clothing.get_balance())
 print(food)
 print(clothing)
-
-def create_spend_chart(categories):
-    return True
+create_spend_chart([food, clothing])
